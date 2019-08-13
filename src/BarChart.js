@@ -8,7 +8,23 @@ class BarChart extends Component {
     }
     
     drawBarChart(data)  {
-        const svgCanvas = d3.select(this.refs.canvas).append("svg").attr("width", 600).attr("height", 400).style("border", "1px solid black")
+        const canvasHeight = 400
+        const canvasWidth = 600
+        const scale = 20
+        const svgCanvas = d3.select(this.refs.canvas)
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 400)
+            .style("border", "1px solid black")
+
+        svgCanvas.selectAll("rect")
+            .data(data).enter()
+                .append("rect")
+                .attr("width", 40)
+                .attr("height", (datapoint) => datapoint * 20)
+                .attr("fill", "orange")
+                .attr("x", (datapoint, iteration) => iteration * 45)
+                .attr("y", (datapoint) => canvasHeight - datapoint * scale)
     }
     render() { 
         return <div ref="canvas"> </div> 
