@@ -1,3 +1,5 @@
+The dashboard allows for easily digesting data in the form of visuals. This project utilizes D3 to render interact and aesthetic data visualization.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
