@@ -2,16 +2,23 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 
 class BarChart extends Component {
+    constructor() {
+        super()
+      }
+
+
     componentDidMount() {
         const data = this.props.data;
-        // const csvData = d3.csv("./assets/dataset", function(x) {
-        //     console.log(x);
-        // });
         this.drawBarChart(data)
     }
-    
-    drawBarChart(data)  {
 
+    drawBarChart(data)  {
+        const yScale = d3.scaleLinear().domain([0, d3.max(data)]).range([0, this.props.height-50])
+        const xScale = d3.scaleLinear().domain([0, 100]).range([ this.props.width, 0])
+        console.log(xScale)
+        const barWidth = (this.props.width-100)/data.length
+        const barSpace = 100/data.length
+        
         const svgCanvas = d3.select(this.refs.canvas)
             .append("svg")
             .attr("width", this.props.width)
@@ -21,23 +28,22 @@ class BarChart extends Component {
         svgCanvas.selectAll("rect")
             .data(data).enter()
                 .append("rect")
-                .attr("width", 40)
+                .attr("width", barWidth)
                 .attr("height", (datapoint) => datapoint * 20)
                 .attr("fill", "orange")
-                .attr("x", (datapoint, iteration) => iteration * 45)
-                .attr("y", (datapoint) => this.props.height - datapoint * this.props.scale)
+                .attr("x", (datapoint, iteration) => iteration * (barWidth+barSpace))
+                .attr("y", (datapoint) => this.props.height - yScale(datapoint))
 
         svgCanvas.selectAll("text")
             .data(data).enter()
             .append("text")
-            .attr("x", (dataPoint, i) => i * 45 + 10)
-            .attr("y", (dataPoint, i) => this.props.height - dataPoint * this.props.scale - 10)
+            .attr("x", (datapoint, i) => i * (barWidth+barSpace)+barWidth/3)
+            .attr("y", (datapoint, i) => this.props.height - yScale(datapoint) - 10)
             .text(dataPoint => dataPoint)
-        
-            
         }
         render() { 
-        return <div ref="canvas"> </div> 
+            
+            return <div ref="canvas"> </div> 
     }
 }
 export default BarChart
